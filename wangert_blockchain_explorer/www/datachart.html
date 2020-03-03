@@ -1,0 +1,445 @@
+{{ template "header.tmpl" . }}
+
+<div class="container-fluid">
+    <div class="row">
+        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3">
+                <h1 class="h2">Data Chart Display</h1>
+            </div>
+
+            <!-- chart1 -->
+            <div class="table-responsive">
+                <table class="table table-striped table-sm">
+                    <thead>
+                    <tr align="right">
+                        <th>X: Time   &nbsp;&nbsp;&nbsp;&nbsp;Y: The number of transaction</th>
+                    </tr>
+
+                    </thead>
+                </table>
+            </div>
+
+
+            <div id="chart1" style="width: 100%;height: 400px; background-color: #e5e5e5"></div>
+
+
+            <!-- chart2 -->
+            <div class="table-responsive">
+                <table class="table table-striped table-sm">
+                    <thead>
+                    <tr align="right">
+                        <th>X: Address   &nbsp;&nbsp;&nbsp;&nbsp;Y: Sender count</th>
+                    </tr>
+
+                    </thead>
+                </table>
+            </div>
+
+
+            <div id="chart2" style="width: 100%;height: 400px; background-color: #e5e5e5"></div>
+
+            <!-- chart3 -->
+            <div class="table-responsive">
+                <table class="table table-striped table-sm">
+                    <thead>
+                    <tr align="right">
+                        <th>X: Address   &nbsp;&nbsp;&nbsp;&nbsp;Y: Recipient count</th>
+                    </tr>
+
+                    </thead>
+                </table>
+            </div>
+
+
+            <div id="chart3" style="width: 100%;height: 400px; background-color: #e5e5e5"></div>
+
+            <!-- chart4-->
+            <div class="table-responsive">
+                <table class="table table-striped table-sm">
+                    <thead>
+                    <tr align="right">
+                        <th>X: Address   &nbsp;&nbsp;&nbsp;&nbsp;Y: The amount received</th>
+                    </tr>
+
+                    </thead>
+                </table>
+            </div>
+
+
+            <div id="chart4" style="width: 100%;height: 400px; background-color: #e5e5e5"></div>
+
+
+
+        </main>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    var myChart = echarts.init(document.getElementById('chart1'));
+
+    var data = generateData();
+
+    var option = {
+        title: {
+            text: 'BlockChain Transaction & Time',
+            left: 10
+        },
+        toolbox: {
+            feature: {
+                dataZoom: {
+                    yAxisIndex: false
+                },
+                saveAsImage: {
+                    pixelRatio: 2
+                }
+            }
+        },
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+                type: 'shadow'
+            }
+        },
+        grid: {
+            bottom: 90
+        },
+        dataZoom: [{
+            type: 'inside'
+        }, {
+            type: 'slider'
+        }],
+        xAxis: {
+            data: data.categoryData,
+            silent: false,
+            splitLine: {
+                show: false
+            },
+            splitArea: {
+                show: false
+            }
+        },
+        yAxis: {
+            splitArea: {
+                show: false
+            }
+        },
+        series: [{
+            type: 'bar',
+            data: data.valueData,
+            // Set `large` for large data amount
+            large: true
+        }]
+    };
+
+    function generateData() {
+
+        var categoryData = [];
+        var valueData = [];
+        var s;
+
+        {{ range .Timestamps }}
+            s = String({{ . }}).split("T")
+            categoryData.push(s[0] + "\n" + s[1]);
+        {{ end }}
+
+        {{ range .TransactionCounts }}
+            valueData.push({{ . }});
+        {{ end }}
+
+        //alert(categoryData.length)
+
+        return {
+            categoryData: categoryData,
+            valueData: valueData
+        };
+    }
+
+
+    myChart.setOption(option);
+
+    window.addEventListener("resize", function () {
+        myChart.resize();
+        myChart.resize();
+    })
+
+</script>
+
+<script type="text/javascript">
+    var myChart = echarts.init(document.getElementById('chart2'));
+
+    var data = generateData();
+
+    var option = {
+        title: {
+            text: 'Sender Count of Address',
+            left: 10
+        },
+        toolbox: {
+            feature: {
+                dataZoom: {
+                    yAxisIndex: false
+                },
+                saveAsImage: {
+                    pixelRatio: 2
+                }
+            }
+        },
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+                type: 'shadow'
+            }
+        },
+        grid: {
+            bottom: 90
+        },
+        dataZoom: [{
+            type: 'inside'
+        }, {
+            type: 'slider'
+        }],
+        xAxis: {
+            data: data.categoryData,
+            silent: false,
+            splitLine: {
+                show: false
+            },
+            splitArea: {
+                show: false
+            }
+        },
+        yAxis: {
+            splitArea: {
+                show: false
+            }
+        },
+        series: [{
+            type: 'bar',
+            data: data.valueData,
+            // Set `large` for large data amount
+            large: true
+        }]
+    };
+
+    function generateData() {
+        var categoryData = [];
+        var valueData = [];
+        var s;
+
+    {{ range .AddressList }}
+        //s = String({{ . }}).split("T")
+        //categoryData.push(s[0] + "\n" + s[1]);
+        s = String({{ . }})
+        categoryData.push(s.substring(0, s.length / 2) + "\n" + s.substring(s.length / 2 + 1))
+    {{ end }}
+
+    {{ range .SenderCounts }}
+        valueData.push({{ . }});
+    {{ end }}
+
+        //alert(categoryData.length)
+
+        return {
+            categoryData: categoryData,
+            valueData: valueData
+        };
+    }
+
+
+    myChart.setOption(option);
+
+    window.addEventListener("resize", function () {
+        myChart.resize();
+        myChart.resize();
+    })
+
+</script>
+
+<script type="text/javascript">
+    var myChart = echarts.init(document.getElementById('chart3'));
+
+    var data = generateData();
+
+    var option = {
+        title: {
+            text: 'Recipient Count of Address',
+            left: 10
+        },
+        toolbox: {
+            feature: {
+                dataZoom: {
+                    yAxisIndex: false
+                },
+                saveAsImage: {
+                    pixelRatio: 2
+                }
+            }
+        },
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+                type: 'shadow'
+            }
+        },
+        grid: {
+            bottom: 90
+        },
+        dataZoom: [{
+            type: 'inside'
+        }, {
+            type: 'slider'
+        }],
+        xAxis: {
+            data: data.categoryData,
+            silent: false,
+            splitLine: {
+                show: false
+            },
+            splitArea: {
+                show: false
+            }
+        },
+        yAxis: {
+            splitArea: {
+                show: false
+            }
+        },
+        series: [{
+            type: 'bar',
+            data: data.valueData,
+            // Set `large` for large data amount
+            large: true
+        }]
+    };
+
+    function generateData() {
+        var categoryData = [];
+        var valueData = [];
+        var s;
+
+    {{ range .AddressList }}
+        //s = String({{ . }}).split("T")
+        //categoryData.push(s[0] + "\n" + s[1]);
+        s = String({{ . }})
+        categoryData.push(s.substring(0, s.length / 2) + "\n" + s.substring(s.length / 2 + 1))
+    {{ end }}
+
+    {{ range .RecipientCounts }}
+        valueData.push({{ . }});
+    {{ end }}
+
+        //alert(categoryData.length)
+
+        return {
+            categoryData: categoryData,
+            valueData: valueData
+        };
+    }
+
+
+    myChart.setOption(option);
+
+    window.addEventListener("resize", function () {
+        myChart.resize();
+        myChart.resize();
+    })
+
+</script>
+
+<script type="text/javascript">
+    var myChart = echarts.init(document.getElementById('chart4'));
+
+    var data = generateData();
+
+    var option = {
+        title: {
+            text: 'The Amount Received of Address',
+            left: 10
+        },
+        toolbox: {
+            feature: {
+                dataZoom: {
+                    yAxisIndex: false
+                },
+                saveAsImage: {
+                    pixelRatio: 2
+                }
+            }
+        },
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+                type: 'shadow'
+            }
+        },
+        grid: {
+            bottom: 90
+        },
+        dataZoom: [{
+            type: 'inside'
+        }, {
+            type: 'slider'
+        }],
+        xAxis: {
+            data: data.categoryData,
+            silent: false,
+            splitLine: {
+                show: false
+            },
+            splitArea: {
+                show: false
+            }
+        },
+        yAxis: {
+            splitArea: {
+                show: false
+            },
+
+            axisLabel: {
+                rotate: 60,
+                margin: 2,
+            }
+        },
+        series: [{
+            type: 'bar',
+            data: data.valueData,
+            // Set `large` for large data amount
+            large: true
+        }]
+    };
+
+    function generateData() {
+        var categoryData = [];
+        var valueData = [];
+        var s;
+
+    {{ range .AddressList }}
+        //s = String({{ . }}).split("T")
+        //categoryData.push(s[0] + "\n" + s[1]);
+        s = String({{ . }})
+        categoryData.push(s.substring(0, s.length / 2) + "\n" + s.substring(s.length / 2 + 1))
+    {{ end }}
+
+    {{ range .TotalValue }}
+        valueData.push({{ . }});
+    {{ end }}
+
+        //alert(categoryData.length)
+
+        return {
+            categoryData: categoryData,
+            valueData: valueData
+        };
+    }
+
+
+    myChart.setOption(option);
+
+    window.addEventListener("resize", function () {
+        myChart.resize();
+        myChart.resize();
+    })
+
+</script>
+{{ template "footer.tmpl" . }}
