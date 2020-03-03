@@ -1,8 +1,9 @@
 # wangert_blockchain_explorer
 Based on toy-block-explorer, ethereum block data is presented in tabular and bar charts.
 
-
-![tabular](https://github.com/Wangert/wangert_blockchain_explorer/blob/master/wangert_blockchain_explorer/tabular.png)
+- Tabular <br/>
+![tabular](https://github.com/Wangert/wangert_blockchain_explorer/blob/master/wangert_blockchain_explorer/tabular.png) <br/>
+- Bar Chart <br/>
 ![barChart](https://github.com/Wangert/wangert_blockchain_explorer/blob/master/wangert_blockchain_explorer/barChart.png)
 
 ## Building and running the project
