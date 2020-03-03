@@ -13,8 +13,3 @@
 
 # Dependency directories (remove the comment below to include it)
 # vendor/
-
-*.css linguist-vendored
-*.scss linguist-vendored
-*.js linguist-vendored
-*.html linguist-vendored
